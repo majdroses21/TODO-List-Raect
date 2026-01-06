@@ -13,7 +13,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import AlarmIcon from "@mui/icons-material/Alarm";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
-export default () => {
+export default ({title, description}) => {
   const theme = useTheme();
   const useColor = theme.palette;
   //Css Styles
@@ -53,13 +53,13 @@ export default () => {
                 variant="h5"
                 sx={{ textAlign: "left", marginLeft: 1}}
               >
-                Learn React
+                {title}
               </Typography>
               <Typography
                 variant="h6"
                 sx={{ textAlign: "left", marginLeft: 1 }}
               >
-                Lorem ipsum dolor sit amet.
+                {description}
               </Typography>
             </Grid>
             <Grid
