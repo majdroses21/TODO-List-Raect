@@ -17,6 +17,9 @@ export const IndigoBlueTheme = createTheme({
       contrastText: "#000",
     },
   },
+  typography: {
+    fontFamily: '"Emilys Candy", cursive',
+  },
 });
 
 // purple Theme
@@ -34,5 +37,8 @@ export const purpleTheme = createTheme({
       dark: blueGrey[700],
       contrastText: "#ffffff",
     },
+  },
+  typography: {
+    fontFamily: '"Pacifico", cursive',
   },
 });
