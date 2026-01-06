@@ -1,13 +1,27 @@
-import Header from '../components/layout/Header';
-import Footer from '../components/layout/Footer';
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
 
 const MainLayout = ({ children }) => {
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+      }}
+    >
       <Header />
-      <div style={{ paddingTop: '93px' }}>
+      <main
+        style={{
+          display: "flex",
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "20px",
+        }}
+      >
         {children}
-      </div>
+      </main>
       <Footer />
     </div>
   );
