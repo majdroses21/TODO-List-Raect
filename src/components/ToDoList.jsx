@@ -8,6 +8,7 @@ import Divider from "@mui/material/Divider";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useState } from "react";
+import Task from "./Task";
 export default () => {
   const [alignment, setAlignment] = useState("web");
 
@@ -34,6 +35,9 @@ export default () => {
             <ToggleButton value="completed">Done</ToggleButton>
           </ToggleButtonGroup>
           {/* ===/ Fillter Btons /==== */}
+          {/* === Task ==== */}
+          <Task />
+          {/* ===/ Task /==== */}
         </CardContent>
         <CardActions>
           <Button size="small">Learn More</Button>
