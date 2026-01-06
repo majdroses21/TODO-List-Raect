@@ -14,7 +14,7 @@ import TextField from "@mui/material/TextField";
 //Others
 import { v4 as uuid } from "uuid";
 
-const tasks = [
+const tasksArr = [
   {
     id: uuid(),
     title: "Complete UI Design",
@@ -64,6 +64,18 @@ export default () => {
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
+  const [tasks, setTasks] = useState(tasksArr);
+  const [taskTitle, setTaskTitle] = useState("");
+  const handelAddTask = () => {
+    const newTask = {
+      id: uuid(),
+      title: taskTitle,
+      details: "",
+      isCompleted: false,
+    };
+    setTasks([...tasks, newTask]);
+    setTaskTitle("");
+  };
   return (
     <Container maxWidth="sm">
       <Card sx={{ minWidth: 275 }}>
@@ -110,6 +122,10 @@ export default () => {
                 label="Add Task"
                 variant="standard"
                 style={{ width: "100%" }}
+                value={taskTitle}
+                onChange={(e) => {
+                  setTaskTitle(e.target.value);
+                }}
               />
             </Grid>
             <Grid
@@ -121,8 +137,9 @@ export default () => {
               <Button
                 variant="contained"
                 style={{ width: "100%", height: "100%" }}
+                onClick={handelAddTask}
               >
-                Contained
+                add
               </Button>
             </Grid>
           </Grid>
