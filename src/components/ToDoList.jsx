@@ -9,6 +9,8 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useState } from "react";
 import Task from "./Task";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
 export default () => {
   const [alignment, setAlignment] = useState("web");
 
@@ -38,6 +40,31 @@ export default () => {
           {/* === Task ==== */}
           <Task />
           {/* ===/ Task /==== */}
+          {/* Add Task */}
+          <Grid container spacing={2} sx={{ marginTop: 2 }}>
+            <Grid size={8}>
+              <TextField
+                id="standard-basic"
+                label="Add Task"
+                variant="standard"
+                style={{ width: "100%" }}
+              />
+            </Grid>
+            <Grid
+              size={4}
+              display="flex"
+              justifyContent="space-around"
+              alignItems="center"
+            >
+              <Button
+                variant="contained"
+                style={{ width: "100%", height: "100%" }}
+              >
+                Contained
+              </Button>
+            </Grid>
+          </Grid>
+          {/* ===== Add Task ===== */}
         </CardContent>
         <CardActions>
           <Button size="small">Learn More</Button>
