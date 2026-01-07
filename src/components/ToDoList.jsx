@@ -11,60 +11,18 @@ import { useState } from "react";
 import Task from "./Task";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
+import { TodosContext } from "../contexts/todosContext";
+import { useContext } from "react";
 //Others
 import { v4 as uuid } from "uuid";
 
-const tasksArr = [
-  {
-    id: uuid(),
-    title: "Complete UI Design",
-    details: "Design the main user interface for the application using Figma",
-    isCompleted: true,
-  },
-  {
-    id: uuid(),
-    title: "Write Code",
-    details: "Develop core components using React",
-    isCompleted: true,
-  },
-  {
-    id: uuid(),
-    title: "Test Application",
-    details: "Conduct comprehensive testing to ensure all features work",
-    isCompleted: false,
-  },
-  {
-    id: uuid(),
-    title: "Code Review",
-    details: "Review code with team and fix any bugs",
-    isCompleted: false,
-  },
-  {
-    id: uuid(),
-    title: "Write Documentation",
-    details: "Document all functions and components in the code",
-    isCompleted: false,
-  },
-  {
-    id: uuid(),
-    title: "Deploy Application",
-    details: "Upload application to server and publish for users",
-    isCompleted: false,
-  },
-  {
-    id: uuid(),
-    title: "Collect Feedback",
-    details: "Get user feedback and improve the application",
-    isCompleted: false,
-  },
-];
 export default () => {
   const [alignment, setAlignment] = useState("web");
 
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
-  const [tasks, setTasks] = useState(tasksArr);
+  const { tasks, setTasks } = useContext(TodosContext);
   const [taskTitle, setTaskTitle] = useState("");
   const handelAddTask = () => {
     const newTask = {
@@ -76,16 +34,6 @@ export default () => {
     setTasks([...tasks, newTask]);
     setTaskTitle("");
   };
-  const handelClickOnCheck = (todoId) => {
-   const UpdetedTask = tasks.map((t)=> {
-      if (t.id === todoId) {
-        t.isCompleted = !t.isCompleted;
-      }
-      return t;
-    })
-    setTasks(tasks=>([...UpdetedTask]));
-    // setTasks([...tasks, UpdetedTask]);
-  }
   return (
     <Container maxWidth="sm">
       <Card sx={{ minWidth: 275 }}>
@@ -116,7 +64,6 @@ export default () => {
               return (
                 <Task
                   todo={task}
-                  onCheckClick={handelClickOnCheck}
                   key={task.id}
                 />
               );

@@ -10,10 +10,10 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckIcon from "@mui/icons-material/Check";
-import AlarmIcon from "@mui/icons-material/Alarm";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-
-export default ({ todo, onCheckClick }) => {
+//Context Imports
+import { TodosContext } from "../contexts/todosContext";
+import { useContext } from "react";
+export default ({ todo }) => {
   const theme = useTheme();
   const useColor = theme.palette;
   //Css Styles
@@ -36,9 +36,19 @@ export default ({ todo, onCheckClick }) => {
       boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.2)",
     },
   };
+  const { tasks, setTasks } = useContext(TodosContext);
+// Event Handelars
+
   const handelCheckClick = () => {
-    onCheckClick(todo.id);
+     const UpdetedTask = tasks.map((t) => {
+      if (t.id === todo.id) {
+        t.isCompleted = !t.isCompleted;
+      }
+      return t;
+    });
+    setTasks((tasks) => [...UpdetedTask]);
   };
+// ===== Event Handelars =====
   return (
     <>
       <Card
