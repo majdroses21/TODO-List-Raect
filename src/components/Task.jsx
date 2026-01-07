@@ -13,7 +13,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import AlarmIcon from "@mui/icons-material/Alarm";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
-export default ({title, description}) => {
+export default ({ todo, onCheckClick }) => {
   const theme = useTheme();
   const useColor = theme.palette;
   //Css Styles
@@ -36,6 +36,9 @@ export default ({title, description}) => {
       boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.2)",
     },
   };
+  const handelCheckClick = () => {
+    onCheckClick(todo.id);
+  };
   return (
     <>
       <Card
@@ -51,15 +54,15 @@ export default ({title, description}) => {
             <Grid size={8}>
               <Typography
                 variant="h5"
-                sx={{ textAlign: "left", marginLeft: 1}}
+                sx={{ textAlign: "left", marginLeft: 1 }}
               >
-                {title}
+                {todo.title}
               </Typography>
               <Typography
                 variant="h6"
                 sx={{ textAlign: "left", marginLeft: 1 }}
               >
-                {description}
+                {todo.details}
               </Typography>
             </Grid>
             <Grid
@@ -68,9 +71,22 @@ export default ({title, description}) => {
               justifyContent="space-around"
               alignItems="center"
             >
-              <IconButton size="medium" sx={buttonStyle}>
+              {/* Check Button */}
+              <IconButton
+                onClick={handelCheckClick}
+                size="medium"
+                sx={{
+                  ...buttonStyle,
+                  color: todo.isCompleted ? "#fff" : useColor.primary.main,
+                  backgroundColor: todo.isCompleted
+                    ? useColor.primary.main
+                    : "#fff",
+                  border: todo.isCompleted ? `2px solid #fff` : "none",
+                }}
+              >
                 <CheckIcon />
               </IconButton>
+              {/* ===== Check Button ===== */}
               <IconButton size="medium" sx={buttonStyle}>
                 <EditIcon />
               </IconButton>

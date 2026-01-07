@@ -76,6 +76,16 @@ export default () => {
     setTasks([...tasks, newTask]);
     setTaskTitle("");
   };
+  const handelClickOnCheck = (todoId) => {
+   const UpdetedTask = tasks.map((t)=> {
+      if (t.id === todoId) {
+        t.isCompleted = !t.isCompleted;
+      }
+      return t;
+    })
+    setTasks(tasks=>([...UpdetedTask]));
+    // setTasks([...tasks, UpdetedTask]);
+  }
   return (
     <Container maxWidth="sm">
       <Card sx={{ minWidth: 275 }}>
@@ -105,8 +115,8 @@ export default () => {
             tasks.map((task) => {
               return (
                 <Task
-                  title={task.title}
-                  description={task.details}
+                  todo={task}
+                  onCheckClick={handelClickOnCheck}
                   key={task.id}
                 />
               );
