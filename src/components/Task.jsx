@@ -10,10 +10,12 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckIcon from "@mui/icons-material/Check";
+// Dialog-related state is handled by parent; no local useState needed
+
 //Context Imports
 import { TodosContext } from "../contexts/todosContext";
 import { useContext } from "react";
-export default ({ todo }) => {
+export default ({ todo, onDelete }) => {
   const theme = useTheme();
   const useColor = theme.palette;
   //Css Styles
@@ -37,10 +39,10 @@ export default ({ todo }) => {
     },
   };
   const { tasks, setTasks } = useContext(TodosContext);
-// Event Handelars
+  // Event Handelars
 
   const handelCheckClick = () => {
-     const UpdetedTask = tasks.map((t) => {
+    const UpdetedTask = tasks.map((t) => {
       if (t.id === todo.id) {
         t.isCompleted = !t.isCompleted;
       }
@@ -48,7 +50,8 @@ export default ({ todo }) => {
     });
     setTasks((tasks) => [...UpdetedTask]);
   };
-// ===== Event Handelars =====
+  // parent will handle delete modal; call onDelete when delete button clicked
+  // ===== Event Handelars =====
   return (
     <>
       <Card
@@ -100,7 +103,11 @@ export default ({ todo }) => {
               <IconButton size="medium" sx={buttonStyle}>
                 <EditIcon />
               </IconButton>
-              <IconButton size="medium" sx={buttonStyle}>
+              <IconButton
+                size="medium"
+                sx={buttonStyle}
+                onClick={() => onDelete && onDelete(todo)}
+              >
                 <DeleteIcon />
               </IconButton>
             </Grid>

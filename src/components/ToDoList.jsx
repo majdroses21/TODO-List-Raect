@@ -13,6 +13,7 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import { TodosContext } from "../contexts/todosContext";
 import { useContext } from "react";
+import DeleteModal from "./layout/tools/DeleteModal";
 //Others
 import { v4 as uuid } from "uuid";
 
@@ -33,6 +34,34 @@ export default () => {
     };
     setTasks([...tasks, newTask]);
     setTaskTitle("");
+  };
+  // Modal state for delete dialog (lifted here so Task remains pure)
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+  const handleDeleteClick = (task) => {
+    setSelectedTask(task);
+    setModalOpen(true);
+  };
+  const handleClose = () => {
+    setModalOpen(false);
+    setSelectedTask(null);
+  };
+  const confirmDelete = () => {
+    if (!selectedTask) return handleClose();
+    // Yaroob Code
+    // const updatedTasks = tasks.filter((t) => {
+    //   if (t.id == selectedTask.id) {
+    //     return false;
+    //   } else {
+    //     return true;
+    //   }
+    //   return t.id != selectedTask.id
+    // })
+    // setTasks(updatedTasks);
+    
+    // Copilot AI Code
+    setTasks((prev) => prev.filter((t) => t.id !== selectedTask.id));
+    handleClose();
   };
   return (
     <Container maxWidth="sm">
@@ -65,6 +94,7 @@ export default () => {
                 <Task
                   todo={task}
                   key={task.id}
+                  onDelete={() => handleDeleteClick(task)}
                 />
               );
             })
@@ -106,6 +136,14 @@ export default () => {
           <Button size="small">Learn More</Button>
         </CardActions>
       </Card>
+      {/* Delete Dialog */}
+      <DeleteModal
+        open={modalOpen}
+        handleClose={handleClose}
+        handleConfirm={confirmDelete}
+        task={selectedTask}
+      />
+      {/* ===== Delete Dialog ===== */}
     </Container>
   );
 };
