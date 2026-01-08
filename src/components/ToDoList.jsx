@@ -1,3 +1,4 @@
+//Imports
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -14,40 +15,46 @@ import TextField from "@mui/material/TextField";
 import { TodosContext } from "../contexts/todosContext";
 import { useContext } from "react";
 import DeleteModal from "./layout/tools/DeleteModal";
+import AddEditTaskModal from "./layout/tools/AddEditTaskModal";
 //Others
 import { v4 as uuid } from "uuid";
 
 export default () => {
-  const [alignment, setAlignment] = useState("web");
-
-  const handleChange = (event, newAlignment) => {
-    setAlignment(newAlignment);
-  };
+  //
   const { tasks, setTasks } = useContext(TodosContext);
-  const [taskTitle, setTaskTitle] = useState("");
-  const handelAddTask = () => {
-    const newTask = {
-      id: uuid(),
-      title: taskTitle,
-      details: "",
-      isCompleted: false,
-    };
-    setTasks([...tasks, newTask]);
-    setTaskTitle("");
-  };
-  // Modal state for delete dialog (lifted here so Task remains pure)
-  const [modalOpen, setModalOpen] = useState(false);
+  const [formTask, setFormTask] = useState({
+    title: "",
+    details: "",
+  });
+  // Modal States
   const [selectedTask, setSelectedTask] = useState(null);
+  const [openDeleteModal, setOpenDeleteDialog] = useState(false);
+  const [openAddEditDialog, setOpenAddEditDialog] = useState(false);
+  const [modalType, setModalType] = useState("add"); // TODO: Try set null later
+
+  // Toggle Buttons Handler
+  const [alignment, setAlignment] = useState("all");
+  const handleChange = (event, newAlignment) => {
+    // setAlignment(newAlignment);
+    if (newAlignment !== null) {
+      setAlignment(newAlignment);
+    }
+  };
+
+  // Methods
+  // Delete Handlers
   const handleDeleteClick = (task) => {
     setSelectedTask(task);
-    setModalOpen(true);
+    setOpenDeleteDialog(true);
   };
-  const handleClose = () => {
-    setModalOpen(false);
+
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteDialog(false);
     setSelectedTask(null);
   };
+
   const confirmDelete = () => {
-    if (!selectedTask) return handleClose();
+    if (!selectedTask) return handleCloseDeleteModal();
     // Yaroob Code
     // const updatedTasks = tasks.filter((t) => {
     //   if (t.id == selectedTask.id) {
@@ -58,11 +65,55 @@ export default () => {
     //   return t.id != selectedTask.id
     // })
     // setTasks(updatedTasks);
-    
+
     // Copilot AI Code
     setTasks((prev) => prev.filter((t) => t.id !== selectedTask.id));
-    handleClose();
+    handleCloseDeleteModal();
   };
+  // ===== Delete Handlers =====
+
+  // Add/Edit Handlers
+  const handleAddClick = () => {
+    setModalType("add");
+    // TODO set no selected task => setSelectedTask(null);
+    setOpenAddEditDialog(true);
+  };
+
+  const handleEditClick = () => {
+    setModalType("edit");
+    // TODO set no selected task => setSelectedTask(null);
+    setOpenAddEditDialog(true);
+  };
+
+  const handleCloseAddEditModal = () => {
+    setOpenAddEditDialog(false);
+    setSelectedTask(null);
+  };
+
+  const confirmAddTask = () => {
+    //TODO: Add Validation Manual || Use any Laybrary
+    const newTask = {
+      id: uuid(),
+      title: formTask.title,
+      details: formTask.details,
+      isCompleted: false,
+    };
+    setTasks([...tasks, newTask]);
+    setFormTask({});
+    handleCloseAddEditModal();
+    //TODO: Handel Add Success Tost
+  };
+
+  const confirmEditTask = () => {
+    // Reset form & close
+    setFormTask({});
+    handleCloseAddEditModal();
+  };
+  // ===== Add/Edit Handlers =====
+
+  // Filter Tasks
+  //TODO
+  // ===== Filter Tasks =====
   return (
     <Container maxWidth="sm">
       <Card sx={{ minWidth: 275 }}>
@@ -95,6 +146,7 @@ export default () => {
                   todo={task}
                   key={task.id}
                   onDelete={() => handleDeleteClick(task)}
+                  onEdit={() => handleEditClick(task)}
                 />
               );
             })
@@ -103,18 +155,6 @@ export default () => {
           {/* ===/ Task /==== */}
           {/* Add Task */}
           <Grid container spacing={2} sx={{ marginTop: 2 }}>
-            <Grid size={8}>
-              <TextField
-                id="standard-basic"
-                label="Add Task"
-                variant="standard"
-                style={{ width: "100%" }}
-                value={taskTitle}
-                onChange={(e) => {
-                  setTaskTitle(e.target.value);
-                }}
-              />
-            </Grid>
             <Grid
               size={4}
               display="flex"
@@ -124,9 +164,9 @@ export default () => {
               <Button
                 variant="contained"
                 style={{ width: "100%", height: "100%" }}
-                onClick={handelAddTask}
+                onClick={handleAddClick}
               >
-                add
+                add task
               </Button>
             </Grid>
           </Grid>
@@ -138,12 +178,22 @@ export default () => {
       </Card>
       {/* Delete Dialog */}
       <DeleteModal
-        open={modalOpen}
-        handleClose={handleClose}
+        open={openDeleteModal}
+        handleClose={handleCloseDeleteModal}
         handleConfirm={confirmDelete}
         task={selectedTask}
       />
       {/* ===== Delete Dialog ===== */}
+      {/* Add/Edit Dialog */}
+      <AddEditTaskModal
+        type={modalType}
+        open={openAddEditDialog}
+        handleClose={handleCloseAddEditModal}
+        handleConfirm={modalType === "add" ? confirmAddTask : confirmEditTask}
+        formTask={formTask}
+        setFormTask={setFormTask}
+      />
+      {/* ===== Add/Edit Dialog ===== */}
     </Container>
   );
 };
