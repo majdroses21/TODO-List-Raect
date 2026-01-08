@@ -14,3 +14,7 @@ body {
   background-color: rgb(93, 86, 100);
 
 }
+.css-10d30g3-MuiPaper-root-MuiDialog-paper{
+  /* border: solid red 3px; */
+  width: 40%;
+}
