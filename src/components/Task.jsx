@@ -11,10 +11,12 @@ import CheckIcon from "@mui/icons-material/Check";
 
 //Context Imports
 import { TodosContext } from "../contexts/todosContext";
+import { useToast } from "../contexts/ToastContext";
 import { useContext } from "react";
 export default ({ todo, onDelete, onEdit }) => {
   const theme = useTheme();
   const useColor = theme.palette;
+  const { showToast } = useToast();
   //Css Styles
   const buttonStyle = {
     // Main Styles
@@ -46,6 +48,8 @@ export default ({ todo, onDelete, onEdit }) => {
       return t;
     });
     setTasks((tasks) => [...UpdetedTask]);
+    const message = todo.isCompleted ? "Task marked as pending" : "Task marked as completed";
+    showToast(message, "info");
   };
   // ===== Event Handelars =====
   return (

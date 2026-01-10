@@ -16,12 +16,14 @@ import { TodosContext } from "../contexts/todosContext";
 import { useContext } from "react";
 import DeleteModal from "./layout/tools/DeleteModal";
 import AddEditTaskModal from "./layout/tools/AddEditTaskModal";
+import { useToast } from "../contexts/ToastContext";
 //Others
 import { v4 as uuid } from "uuid";
 
 export default () => {
   //
   const { tasks, setTasks } = useContext(TodosContext);
+  const { showToast } = useToast();
   const [formTask, setFormTask] = useState({
     title: "",
     details: "",
@@ -68,6 +70,7 @@ export default () => {
 
     // Copilot AI Code
     setTasks((prev) => prev.filter((t) => t.id !== selectedTask.id));
+    showToast("Task deleted successfully", "success");
     handleCloseDeleteModal();
   };
   // ===== Delete Handlers =====
@@ -93,7 +96,6 @@ export default () => {
   };
 
   const confirmAddTask = () => {
-    //TODO: Add Validation Manual || Use any Laybrary
     const newTask = {
       id: uuid(),
       title: formTask.title,
@@ -103,8 +105,8 @@ export default () => {
     // setTasks([...tasks, newTask]);
     setTasks(prev => [...prev, newTask]);
     setFormTask({ title: '', details: '' });
+    showToast("Task added successfully", "success");
     handleCloseAddEditModal();
-    //TODO: Handel Add Success Tost
   };
 
   const confirmEditTask = () => {
@@ -116,6 +118,7 @@ export default () => {
     ));
     // Reset form & close
     setFormTask({ title: '', details: '' });
+    showToast("Task updated successfully", "success");
     handleCloseAddEditModal();
   };
   // ===== Add/Edit Handlers =====
