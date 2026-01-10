@@ -75,13 +75,15 @@ export default () => {
   // Add/Edit Handlers
   const handleAddClick = () => {
     setModalType("add");
-    // TODO set no selected task => setSelectedTask(null);
+    setSelectedTask(null);
+    setFormTask({ title: '', details: '' });
     setOpenAddEditDialog(true);
   };
 
-  const handleEditClick = () => {
+  const handleEditClick = (task) => {
     setModalType("edit");
-    // TODO set no selected task => setSelectedTask(null);
+    setSelectedTask(task);
+    setFormTask({ title: task.title, details: task.details });
     setOpenAddEditDialog(true);
   };
 
@@ -98,15 +100,22 @@ export default () => {
       details: formTask.details,
       isCompleted: false,
     };
-    setTasks([...tasks, newTask]);
-    setFormTask({});
+    // setTasks([...tasks, newTask]);
+    setTasks(prev => [...prev, newTask]);
+    setFormTask({ title: '', details: '' });
     handleCloseAddEditModal();
     //TODO: Handel Add Success Tost
   };
 
   const confirmEditTask = () => {
+    // prev === tasks
+    setTasks(prev => prev.map(t =>
+      t.id === selectedTask.id
+        ? { ...t, title: formTask.title, details: formTask.details }
+        : t
+    ));
     // Reset form & close
-    setFormTask({});
+    setFormTask({ title: '', details: '' });
     handleCloseAddEditModal();
   };
   // ===== Add/Edit Handlers =====
