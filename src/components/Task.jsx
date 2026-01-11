@@ -23,6 +23,10 @@ export default ({ todo, onDelete, onEdit }) => {
     backgroundColor: useColor.primary.contrastText,
     color: useColor.primary.main,
     transition: "all 0.3s ease-in-out",
+    padding: { xs: "6px", sm: "8px" },
+    "& .MuiSvgIcon-root": {
+      fontSize: { xs: "1.25rem", sm: "1.5rem" },
+    },
     // on Hover
     "&:hover": {
       backgroundColor: "#cfcfcf",
@@ -48,8 +52,10 @@ export default ({ todo, onDelete, onEdit }) => {
       return t;
     });
     setTasks((tasks) => [...UpdetedTask]);
-    localStorage.setItem('tasks', JSON.stringify(UpdetedTask))
-    const message = todo.isCompleted ? "Task marked as pending" : "Task marked as completed";
+    localStorage.setItem("tasks", JSON.stringify(UpdetedTask));
+    const message = todo.isCompleted
+      ? "Task marked as pending"
+      : "Task marked as completed";
     showToast(message, "info");
   };
   // ===== Event Handelars =====
@@ -60,21 +66,39 @@ export default ({ todo, onDelete, onEdit }) => {
           minWidth: 275,
           backgroundColor: useColor.primary.main,
           color: useColor.primary.contrastText,
-          mt: 2,
+          mt: { xs: 1, sm: 2 },
         }}
       >
-        <CardContent>
-          <Grid container spacing={2}>
+        <CardContent
+          sx={{
+            p: { xs: 1.5, sm: 2 },
+            "&:last-child": { pb: { xs: 1.5, sm: 2 } },
+          }}
+        >
+          <Grid container spacing={1}>
             <Grid size={8}>
               <Typography
                 variant="h5"
-                sx={{ textAlign: "left", marginLeft: 1 }}
+                sx={{
+                  textAlign: "left",
+                  ml: 0.5,
+                  fontSize: { xs: "1rem", sm: "1.7rem" },
+                  fontWeight: 500,
+                }}
+                style={{
+                  textDecoration: todo.isCompleted ? 'line-through' : 'none'
+                }}
               >
                 {todo.title}
               </Typography>
               <Typography
-                variant="h6"
-                sx={{ textAlign: "left", marginLeft: 1 }}
+                variant="body2"
+                sx={{
+                  textAlign: "left",
+                  ml: 0.5,
+                  fontSize: { xs: "0.85rem", sm: "1.3rem" },
+                  mt: 0.5,
+                }}
               >
                 {todo.details}
               </Typography>
@@ -88,9 +112,9 @@ export default ({ todo, onDelete, onEdit }) => {
               {/* Check Button */}
               <IconButton
                 onClick={handelCheckClick}
-                size="medium"
                 sx={{
                   ...buttonStyle,
+                  p: { xs: 0.5, sm: 1 },
                   color: todo.isCompleted ? "#fff" : useColor.primary.main,
                   backgroundColor: todo.isCompleted
                     ? useColor.primary.main
@@ -102,15 +126,14 @@ export default ({ todo, onDelete, onEdit }) => {
               </IconButton>
               {/* ===== Check Button ===== */}
               <IconButton
-                size="medium"
-                sx={buttonStyle}
+                sx={{ ...buttonStyle, p: { xs: 0.5, sm: 1 } }}
                 onClick={() => onEdit && onEdit(todo)}
               >
                 <EditIcon />
               </IconButton>
+
               <IconButton
-                size="medium"
-                sx={buttonStyle}
+                sx={{ ...buttonStyle, p: { xs: 0.5, sm: 1 } }}
                 onClick={() => onDelete && onDelete(todo)}
               >
                 <DeleteIcon />

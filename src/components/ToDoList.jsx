@@ -11,7 +11,6 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useContext, useState, useEffect } from "react";
 import Task from "./Task";
 import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
 import { TodosContext } from "../contexts/todosContext";
 import DeleteModal from "./layout/tools/DeleteModal";
 import AddEditTaskModal from "./layout/tools/AddEditTaskModal";
@@ -31,7 +30,7 @@ export default () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [openDeleteModal, setOpenDeleteDialog] = useState(false);
   const [openAddEditDialog, setOpenAddEditDialog] = useState(false);
-  const [modalType, setModalType] = useState("add"); // TODO: Try set null later
+  const [modalType, setModalType] = useState("add");
 
   // Toggle Buttons Handler
   const [alignment, setAlignment] = useState("all");
@@ -153,14 +152,14 @@ export default () => {
   // Filter Tasks
   let theTasks = tasks;
   if (alignment === "to_do") {
-    theTasks = tasks.filter((t) => !t.isCompleted); // المهام غير المكتملة
+    theTasks = tasks.filter((t) => !t.isCompleted);
   } else if (alignment === "completed") {
-    theTasks = tasks.filter((t) => t.isCompleted); // المهام المكتملة
+    theTasks = tasks.filter((t) => t.isCompleted);
   }
   // ===== Filter Tasks =====
   return (
     <Container maxWidth="sm">
-      <Card sx={{ minWidth: 275 }}>
+      <Card sx={{ minWidth: 275 }} style={{maxHeight: '74vh', overflow: 'overlay'}}>
         <CardContent>
           <Typography variant="h3">My Tasks</Typography>
           <Divider />

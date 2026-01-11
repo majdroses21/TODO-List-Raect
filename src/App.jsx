@@ -1,4 +1,4 @@
-import "./App.css";
+import "./assets/css/App.css";
 import ToDoList from "./components/ToDoList";
 import { ThemeProvider } from "@mui/material/styles";
 import { IndigoBlueTheme, purpleTheme } from "./theme/theme";
