@@ -1,4 +1,6 @@
+// src/components/ThemeModal.jsx
 import * as React from "react";
+import { useContext } from "react";
 import PropTypes from "prop-types";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
@@ -6,6 +8,8 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import { useSpring, animated } from "@react-spring/web";
+import { ThemeContext } from "../../../contexts/ThemeContext";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const Fade = React.forwardRef(function Fade(props, ref) {
   const {
@@ -55,12 +59,19 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  border: "2px solid #000",
+  borderRadius: 2,
   boxShadow: 24,
   p: 4,
 };
 
 export default ({ open, onClose }) => {
+  const { currentTheme, setCurrentTheme } = useContext(ThemeContext);
+
+  const handleThemeChange = (theme) => {
+    setCurrentTheme(theme);
+    onClose();
+  };
+
   return (
     <Modal
       aria-labelledby="spring-modal-title"
@@ -77,45 +88,108 @@ export default ({ open, onClose }) => {
     >
       <Fade in={open}>
         <Box sx={style}>
-          <Typography id="spring-modal-title" variant="h6" component="h2">
-            Change Theme
+          <Typography 
+            id="spring-modal-title" 
+            variant="h5" 
+            component="h2"
+            sx={{ mb: 3, textAlign: 'center', fontWeight: 'bold' }}
+          >
+           Choose Theme 👨🏻‍🎨🎨🖼️
           </Typography>
-          <div style={{display:'flex',justifyContent:'space-evenly'}}>
-            <Button
-              variant="contained"
-              style={{ all: "unset", cursor: "pointer" }}
+          
+          <Box sx={{ display: 'flex', justifyContent: 'space-evenly', gap: 2 }}>
+            {/* Purple Theme */}
+            <Box
+              onClick={() => handleThemeChange('purple')}
+              sx={{
+                cursor: 'pointer',
+                textAlign: 'center',
+                position: 'relative',
+                transition: 'transform 0.2s',
+                '&:hover': {
+                  transform: 'scale(1.05)',
+                },
+              }}
             >
-              purple Theme
+              <Typography variant="body2" sx={{ mb: 1, fontWeight: 'medium' }}>
+                Purple Theme
+              </Typography>
               <Box
                 sx={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 1,
+                  width: 80,
+                  height: 80,
+                  borderRadius: 2,
                   bgcolor: "#9c27b0",
-                  "&:hover": {
+                  border: currentTheme === 'purple' ? '3px solid #4caf50' : '3px solid transparent',
+                  position: 'relative',
+                  transition: 'all 0.3s',
+                  '&:hover': {
                     bgcolor: "#7b1fa2",
                   },
                 }}
-              />
-            </Button>
-            <Button
-              variant="contained"
-              style={{ all: "unset", cursor: "pointer" }}
+              >
+                {currentTheme === 'purple' && (
+                  <CheckCircleIcon
+                    sx={{
+                      position: 'absolute',
+                      top: -10,
+                      right: -10,
+                      color: '#4caf50',
+                      fontSize: 30,
+                      bgcolor: 'white',
+                      borderRadius: '50%',
+                    }}
+                  />
+                )}
+              </Box>
+            </Box>
+
+            {/* Indigo Blue Theme */}
+            <Box
+              onClick={() => handleThemeChange('indigo')}
+              sx={{
+                cursor: 'pointer',
+                textAlign: 'center',
+                position: 'relative',
+                transition: 'transform 0.2s',
+                '&:hover': {
+                  transform: 'scale(1.05)',
+                },
+              }}
             >
-              Indigo Blue Theme
+              <Typography variant="body2" sx={{ mb: 1, fontWeight: 'medium' }}>
+                Indigo Blue
+              </Typography>
               <Box
                 sx={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 1,
+                  width: 80,
+                  height: 80,
+                  borderRadius: 2,
                   bgcolor: "#3f50b5",
-                  "&:hover": {
+                  border: currentTheme === 'indigo' ? '3px solid #4caf50' : '3px solid transparent',
+                  position: 'relative',
+                  transition: 'all 0.3s',
+                  '&:hover': {
                     bgcolor: "#002884",
                   },
                 }}
-              />
-            </Button>
-          </div>
+              >
+                {currentTheme === 'indigo' && (
+                  <CheckCircleIcon
+                    sx={{
+                      position: 'absolute',
+                      top: -10,
+                      right: -10,
+                      color: '#4caf50',
+                      fontSize: 30,
+                      bgcolor: 'white',
+                      borderRadius: '50%',
+                    }}
+                  />
+                )}
+              </Box>
+            </Box>
+          </Box>
         </Box>
       </Fade>
     </Modal>
