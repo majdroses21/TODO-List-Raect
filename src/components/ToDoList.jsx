@@ -8,12 +8,11 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import Task from "./Task";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import { TodosContext } from "../contexts/todosContext";
-import { useContext } from "react";
 import DeleteModal from "./layout/tools/DeleteModal";
 import AddEditTaskModal from "./layout/tools/AddEditTaskModal";
 import { useToast } from "../contexts/ToastContext";
@@ -43,6 +42,22 @@ export default () => {
     }
   };
 
+  //Get All Tasks From Local Storeg if local Storeg hav key defyned a "tasks"
+  useEffect(() => {
+    console.log("Calling the useEffect");
+    // const storageTasks = JSON.parse(localStorage.getItem('tasks'));
+    const storageTasks = localStorage.getItem("tasks");
+    if (
+      storageTasks &&
+      storageTasks !== "undefined" &&
+      storageTasks !== "null"
+    ) {
+      setTasks(JSON.parse(storageTasks)); //ToDoList.jsx:51:1
+    } else {
+      setTasks([]);
+    }
+  }, []);
+
   // Methods
   // Delete Handlers
   const handleDeleteClick = (task) => {
@@ -70,6 +85,10 @@ export default () => {
 
     // Copilot AI Code
     setTasks((prev) => prev.filter((t) => t.id !== selectedTask.id));
+    localStorage.setItem(
+      "tasks",
+      JSON.stringify(tasks.filter((t) => t.id !== selectedTask.id))
+    );
     showToast("Task deleted successfully", "success");
     handleCloseDeleteModal();
   };
@@ -79,7 +98,7 @@ export default () => {
   const handleAddClick = () => {
     setModalType("add");
     setSelectedTask(null);
-    setFormTask({ title: '', details: '' });
+    setFormTask({ title: "", details: "" });
     setOpenAddEditDialog(true);
   };
 
@@ -103,21 +122,29 @@ export default () => {
       isCompleted: false,
     };
     // setTasks([...tasks, newTask]);
-    setTasks(prev => [...prev, newTask]);
-    setFormTask({ title: '', details: '' });
+    // setTasks(prev => [...prev, newTask]);
+    const updatedTasks = [...tasks, newTask];
+    setTasks(updatedTasks);
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    setFormTask({ title: "", details: "" });
     showToast("Task added successfully", "success");
     handleCloseAddEditModal();
   };
 
   const confirmEditTask = () => {
-    // prev === tasks
-    setTasks(prev => prev.map(t =>
-      t.id === selectedTask.id
-        ? { ...t, title: formTask.title, details: formTask.details }
-        : t
-    ));
+    let updatedTasks;
+
+    setTasks((prev) => {
+      updatedTasks = prev.map((t) =>
+        t.id === selectedTask.id
+          ? { ...t, title: formTask.title, details: formTask.details }
+          : t
+      );
+      return updatedTasks;
+    });
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     // Reset form & close
-    setFormTask({ title: '', details: '' });
+    setFormTask({ title: "", details: "" });
     showToast("Task updated successfully", "success");
     handleCloseAddEditModal();
   };

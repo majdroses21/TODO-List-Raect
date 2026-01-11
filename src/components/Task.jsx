@@ -48,6 +48,7 @@ export default ({ todo, onDelete, onEdit }) => {
       return t;
     });
     setTasks((tasks) => [...UpdetedTask]);
+    localStorage.setItem('tasks', JSON.stringify(UpdetedTask))
     const message = todo.isCompleted ? "Task marked as pending" : "Task marked as completed";
     showToast(message, "info");
   };
