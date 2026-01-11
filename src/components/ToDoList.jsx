@@ -151,7 +151,12 @@ export default () => {
   // ===== Add/Edit Handlers =====
 
   // Filter Tasks
-  //TODO
+  let theTasks = tasks;
+  if (alignment === "to_do") {
+    theTasks = tasks.filter((t) => !t.isCompleted); // المهام غير المكتملة
+  } else if (alignment === "completed") {
+    theTasks = tasks.filter((t) => t.isCompleted); // المهام المكتملة
+  }
   // ===== Filter Tasks =====
   return (
     <Container maxWidth="sm">
@@ -173,13 +178,13 @@ export default () => {
             <ToggleButton value="completed">Done</ToggleButton>
           </ToggleButtonGroup>
           {/* ===/ Fillter Btons /==== */}
-          {/* === Task ==== */}
-          {tasks.length === 0 ? (
+          {/* Task */}
+          {theTasks.length === 0 ? (
             <Typography variant="h6" sx={{ marginTop: 2 }}>
               No Tasks Available
             </Typography>
           ) : (
-            tasks.map((task) => {
+            theTasks.map((task) => {
               return (
                 <Task
                   todo={task}
@@ -190,7 +195,6 @@ export default () => {
               );
             })
           )}
-          {}
           {/* ===/ Task /==== */}
           {/* Add Task */}
           <Grid container spacing={2} sx={{ marginTop: 2 }}>
