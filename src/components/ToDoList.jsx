@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useMemo } from "react";
 import Task from "./Task";
 import Grid from "@mui/material/Grid";
 import { TodosContext } from "../contexts/todosContext";
@@ -150,12 +150,47 @@ export default () => {
   // ===== Add/Edit Handlers =====
 
   // Filter Tasks
+  /*
   let theTasks = tasks;
   if (alignment === "to_do") {
+    console.log('calling not completed todos');
     theTasks = tasks.filter((t) => !t.isCompleted);
   } else if (alignment === "completed") {
+    console.log('calling completed todos');
     theTasks = tasks.filter((t) => t.isCompleted);
   }
+    // هذا الحل يبدو انه جيد لك المشكلة فية عند اختيار النودو او الكومبليتد وكتابة اي شيء عم يعمل ري ريندر كامل طالما نحن ضمن سكوب اليمنت غير الكل 
+  */
+  /*
+ // هذا الحل يحل كامل المشكلة ولا يقوم بعمل اعادة رندرة الا في الوقت المناسب
+ // تم تعليق الكود لكتابة كود مختصر اكثر 
+  let theTasks = useMemo(() => {
+    console.log("Filtering tasks...");
+    if (alignment === "to_do") {
+      console.log("calling not completed todos");
+      return tasks.filter((t) => !t.isCompleted);
+    } else if (alignment === "completed") {
+      console.log("calling completed todos");
+      return tasks.filter((t) => t.isCompleted);
+    }
+    return tasks;
+  }, [tasks, alignment]); //[tasks, alignment]
+  */
+
+  let theTasks = useMemo(() => {
+    console.log("Filtering tasks...");
+    switch (alignment) {
+      case "to_do":
+        console.log("calling not completed todos");
+        return tasks.filter((t) => !t.isCompleted);
+      case "completed":
+        console.log("calling completed todos");
+        return tasks.filter((t) => t.isCompleted);
+
+      default:
+        return tasks;
+    }
+  }, [tasks, alignment]);
   // ===== Filter Tasks =====
   return (
     <Container maxWidth="sm">
