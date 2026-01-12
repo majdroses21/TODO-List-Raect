@@ -43,7 +43,6 @@ export default () => {
 
   //Get All Tasks From Local Storeg if local Storeg hav key defyned a "tasks"
   useEffect(() => {
-    console.log("Calling the useEffect");
     // const storageTasks = JSON.parse(localStorage.getItem('tasks'));
     const storageTasks = localStorage.getItem("tasks");
     if (
@@ -150,43 +149,12 @@ export default () => {
   // ===== Add/Edit Handlers =====
 
   // Filter Tasks
-  /*
-  let theTasks = tasks;
-  if (alignment === "to_do") {
-    console.log('calling not completed todos');
-    theTasks = tasks.filter((t) => !t.isCompleted);
-  } else if (alignment === "completed") {
-    console.log('calling completed todos');
-    theTasks = tasks.filter((t) => t.isCompleted);
-  }
-    // هذا الحل يبدو انه جيد لك المشكلة فية عند اختيار النودو او الكومبليتد وكتابة اي شيء عم يعمل ري ريندر كامل طالما نحن ضمن سكوب اليمنت غير الكل 
-  */
-  /*
- // هذا الحل يحل كامل المشكلة ولا يقوم بعمل اعادة رندرة الا في الوقت المناسب
- // تم تعليق الكود لكتابة كود مختصر اكثر 
   let theTasks = useMemo(() => {
-    console.log("Filtering tasks...");
-    if (alignment === "to_do") {
-      console.log("calling not completed todos");
-      return tasks.filter((t) => !t.isCompleted);
-    } else if (alignment === "completed") {
-      console.log("calling completed todos");
-      return tasks.filter((t) => t.isCompleted);
-    }
-    return tasks;
-  }, [tasks, alignment]); //[tasks, alignment]
-  */
-
-  let theTasks = useMemo(() => {
-    console.log("Filtering tasks...");
     switch (alignment) {
       case "to_do":
-        console.log("calling not completed todos");
         return tasks.filter((t) => !t.isCompleted);
       case "completed":
-        console.log("calling completed todos");
         return tasks.filter((t) => t.isCompleted);
-
       default:
         return tasks;
     }
