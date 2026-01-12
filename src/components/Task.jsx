@@ -54,8 +54,8 @@ export default ({ todo, onDelete, onEdit }) => {
     setTasks((tasks) => [...UpdetedTask]);
     localStorage.setItem("tasks", JSON.stringify(UpdetedTask));
     const message = todo.isCompleted
-      ? "Task marked as pending"
-      : "Task marked as completed";
+      ? "Task marked as completed"
+      : "Task marked as pending";
     showToast(message, "info");
   };
   // ===== Event Handelars =====
@@ -86,7 +86,7 @@ export default ({ todo, onDelete, onEdit }) => {
                   fontWeight: 500,
                 }}
                 style={{
-                  textDecoration: todo.isCompleted ? 'line-through' : 'none'
+                  textDecoration: todo.isCompleted ? "line-through" : "none",
                 }}
               >
                 {todo.title}
