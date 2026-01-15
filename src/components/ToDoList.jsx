@@ -8,19 +8,17 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { useContext, useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useReducer } from "react";
 import Task from "./Task";
 import Grid from "@mui/material/Grid";
-import { TodosContext } from "../contexts/todosContext";
 import DeleteModal from "./layout/tools/DeleteModal";
 import AddEditTaskModal from "./layout/tools/AddEditTaskModal";
 import { useToast } from "../contexts/ToastContext";
 //Others
-import { v4 as uuid } from "uuid";
-
+import { tasksReduser } from "../reducers/tasksReducer";
 export default () => {
   //
-  const { tasks, setTasks } = useContext(TodosContext);
+  const [tasks, tasksDispach] = useReducer(tasksReduser, []);
   const { showToast } = useToast();
   const [formTask, setFormTask] = useState({
     title: "",
@@ -41,19 +39,8 @@ export default () => {
     }
   };
 
-  //Get All Tasks From Local Storeg if local Storeg hav key defyned a "tasks"
   useEffect(() => {
-    // const storageTasks = JSON.parse(localStorage.getItem('tasks'));
-    const storageTasks = localStorage.getItem("tasks");
-    if (
-      storageTasks &&
-      storageTasks !== "undefined" &&
-      storageTasks !== "null"
-    ) {
-      setTasks(JSON.parse(storageTasks)); //ToDoList.jsx:51:1
-    } else {
-      setTasks([]);
-    }
+    tasksDispach({ type: "read" });
   }, []);
 
   // Methods
@@ -70,23 +57,7 @@ export default () => {
 
   const confirmDelete = () => {
     if (!selectedTask) return handleCloseDeleteModal();
-    // Yaroob Code
-    // const updatedTasks = tasks.filter((t) => {
-    //   if (t.id == selectedTask.id) {
-    //     return false;
-    //   } else {
-    //     return true;
-    //   }
-    //   return t.id != selectedTask.id
-    // })
-    // setTasks(updatedTasks);
-
-    // Copilot AI Code
-    setTasks((prev) => prev.filter((t) => t.id !== selectedTask.id));
-    localStorage.setItem(
-      "tasks",
-      JSON.stringify(tasks.filter((t) => t.id !== selectedTask.id))
-    );
+    tasksDispach({ type: "deleted", payload: { id: selectedTask.id } });
     showToast("Task deleted successfully", "success");
     handleCloseDeleteModal();
   };
@@ -113,34 +84,27 @@ export default () => {
   };
 
   const confirmAddTask = () => {
-    const newTask = {
-      id: uuid(),
-      title: formTask.title,
-      details: formTask.details,
-      isCompleted: false,
-    };
-    // setTasks([...tasks, newTask]);
-    // setTasks(prev => [...prev, newTask]);
-    const updatedTasks = [...tasks, newTask];
-    setTasks(updatedTasks);
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    tasksDispach({
+      type: "added_task",
+      payload: {
+        title: formTask.title,
+        details: formTask.details,
+      },
+    });
     setFormTask({ title: "", details: "" });
     showToast("Task added successfully", "success");
     handleCloseAddEditModal();
   };
 
   const confirmEditTask = () => {
-    let updatedTasks;
-
-    setTasks((prev) => {
-      updatedTasks = prev.map((t) =>
-        t.id === selectedTask.id
-          ? { ...t, title: formTask.title, details: formTask.details }
-          : t
-      );
-      return updatedTasks;
+    tasksDispach({
+      type: "update",
+      payload: {
+        id: selectedTask.id,
+        title: formTask.title,
+        details: formTask.details,
+      },
     });
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     // Reset form & close
     setFormTask({ title: "", details: "" });
     showToast("Task updated successfully", "success");
