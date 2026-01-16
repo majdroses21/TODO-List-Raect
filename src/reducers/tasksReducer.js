@@ -1,25 +1,20 @@
 import { v4 as uuid } from "uuid";
 
-
 export const tasksReduser = (currTasks, action) => {
-    console.log('calling tasks reduser:', currTasks, action);
     const type = action.type;
 
     switch (type) {
-
-       
-        case 'added_task':
-            {
-                const newTask = {
-                    id: uuid(),
-                    title: action.payload.title,
-                    details: action.payload.details,
-                    isCompleted: false,
-                };
-                const updatedTasks = [...currTasks, newTask];
-                localStorage.setItem("tasks", JSON.stringify(updatedTasks));
-                return updatedTasks;
-            }
+        case 'added_task': {
+            const newTask = {
+                id: uuid(),
+                title: action.payload.title,
+                details: action.payload.details,
+                isCompleted: false,
+            };
+            const updatedTasks = [...currTasks, newTask];
+            localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+            return updatedTasks;
+        }
         case 'deleted': {
             const updatedTasks = currTasks.filter((t) => t.id !== action.payload.id)
             localStorage.setItem("tasks", JSON.stringify(updatedTasks));
@@ -49,7 +44,20 @@ export const tasksReduser = (currTasks, action) => {
                 return []
             }
         }
-       
+        case 'toggledCompleted': {
+            const UpdetedTask = currTasks.map((t) => {
+                //Solve Mutation
+                const updatedTask = { ...t, isCompleted: !t.isCompleted };
+                if (t.id === action.payload.id) {
+                    // t.isCompleted = !t.isCompleted; // Mutation
+                    return updatedTask
+                }
+                return t;
+            });
+            localStorage.setItem("tasks", JSON.stringify(UpdetedTask));
+            return UpdetedTask;
+        }
+
         default:
             throw Error('Unknown Action => ' + type)
             break;

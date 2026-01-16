@@ -8,17 +8,18 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { useState, useEffect, useMemo, useReducer } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Task from "./Task";
 import Grid from "@mui/material/Grid";
 import DeleteModal from "./layout/tools/DeleteModal";
 import AddEditTaskModal from "./layout/tools/AddEditTaskModal";
 import { useToast } from "../contexts/ToastContext";
 //Others
-import { tasksReduser } from "../reducers/tasksReducer";
+import { useTasks, useDispach } from "../contexts/todosContext";
 export default () => {
   //
-  const [tasks, tasksDispach] = useReducer(tasksReduser, []);
+  const tasks = useTasks();
+  const tasksDispach = useDispach();
   const { showToast } = useToast();
   const [formTask, setFormTask] = useState({
     title: "",

@@ -10,9 +10,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import CheckIcon from "@mui/icons-material/Check";
 
 //Context Imports
-import { TodosContext } from "../contexts/todosContext";
 import { useToast } from "../contexts/ToastContext";
-import { useContext } from "react";
+import { useDispach } from "../contexts/todosContext";
 export default ({ todo, onDelete, onEdit }) => {
   const theme = useTheme();
   const useColor = theme.palette;
@@ -41,18 +40,14 @@ export default ({ todo, onDelete, onEdit }) => {
       boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.2)",
     },
   };
-  const { tasks, setTasks } = useContext(TodosContext);
+  const tasksDispach = useDispach();
   // Event Handelars
 
   const handelCheckClick = () => {
-    const UpdetedTask = tasks.map((t) => {
-      if (t.id === todo.id) {
-        t.isCompleted = !t.isCompleted;
-      }
-      return t;
-    });
-    setTasks((tasks) => [...UpdetedTask]);
-    localStorage.setItem("tasks", JSON.stringify(UpdetedTask));
+    tasksDispach({ type: "toggledCompleted", payload: todo });
+    // tasksDispach({type: 'toggledCompleted', payload: {
+    //   id: todo.id
+    // }})
     const message = todo.isCompleted
       ? "Task marked as completed"
       : "Task marked as pending";
